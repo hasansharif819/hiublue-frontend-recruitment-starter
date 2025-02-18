@@ -16,10 +16,14 @@
     "@iconify/react": "^5.2.0",
     "@mui/material": "^6.4.4",
     "@mui/material-nextjs": "next",
+    "axios": "^1.7.9",
     "lodash": "^4.17.21",
+    "mui-sonner": "^1.0.1",
     "next": "^15.0.0",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "react-hook-form": "^7.54.2",
+    "sonner": "^1.7.4"
   },
   "devDependencies": {
     "@types/lodash": "^4.17.15",
