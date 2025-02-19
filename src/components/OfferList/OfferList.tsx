@@ -20,6 +20,8 @@ import {
   InputLabel,
   Button,
   InputAdornment,
+  Tabs,
+  Tab,
 } from "@mui/material";
 import EditSharpIcon from "@mui/icons-material/EditSharp";
 import MoreVertSharpIcon from "@mui/icons-material/MoreVertSharp";
@@ -65,12 +67,15 @@ const OffersList: React.FC = () => {
   const [totalPages, setTotalPages] = useState<number>(1);
   const [pageSize, setPageSize] = useState<number>(5);
   const [totalItems, setTotalItems] = useState<number>(0);
+  const [tabIndex, setTabIndex] = useState<string>("all");
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         const token = localStorage.getItem("token");
+        const statusFilter = tabIndex === "accepted" ? "&status=accepted" : "";
         const response = await fetch(
-          `https://dummy-1.hiublue.com/api/offers?page=${currentPage}&per_page=${pageSize}`,
+          `https://dummy-1.hiublue.com/api/offers?page=${currentPage}&per_page=${pageSize}${statusFilter}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -93,7 +98,7 @@ const OffersList: React.FC = () => {
     };
 
     fetchData();
-  }, [currentPage, pageSize]);
+  }, [currentPage, pageSize, tabIndex]);
 
   useEffect(() => {
     const filtered = offers.filter((offer) => {
@@ -110,7 +115,7 @@ const OffersList: React.FC = () => {
     });
 
     setFilteredOffers(filtered);
-  }, [searchTerm, typeFilter, offers, pageSize]);
+  }, [searchTerm, typeFilter, offers]);
 
   const handlePageChange = (
     event: React.ChangeEvent<unknown>,
@@ -121,10 +126,14 @@ const OffersList: React.FC = () => {
 
   const handlePageSizeChange = (event: any) => {
     setPageSize(event.target.value);
-    setCurrentPage(1); // Reset to the first page when changing page size
+    setCurrentPage(1);
   };
 
-  // Calculate the current range of rows being displayed
+  const handleTabChange = (event: React.SyntheticEvent, newValue: string) => {
+    setTabIndex(newValue);
+    setCurrentPage(1);
+  };
+
   const from = (currentPage - 1) * pageSize + 1;
   const to = Math.min(currentPage * pageSize, totalItems);
 
@@ -137,6 +146,38 @@ const OffersList: React.FC = () => {
       >
         Offers List
       </Typography>
+
+      <Tabs
+        value={tabIndex}
+        onChange={handleTabChange}
+        sx={{
+          mb: 3,
+          "& .MuiTabs-indicator": {
+            backgroundColor: "#1C252E",
+          },
+        }}
+      >
+        <Tab
+          label="All"
+          value="all"
+          sx={{
+            color: "#1C252E",
+            "&.Mui-selected": {
+              color: "#1C252E",
+            },
+          }}
+        />
+        <Tab
+          label="Accepted"
+          value="accepted"
+          sx={{
+            color: "#1C252E",
+            "&.Mui-selected": {
+              color: "#1C252E",
+            },
+          }}
+        />
+      </Tabs>
 
       <Stack direction="row" alignItems="center" spacing={2} sx={{ mb: 3 }}>
         <TextField
@@ -166,7 +207,7 @@ const OffersList: React.FC = () => {
             <MenuItem value="all">All</MenuItem>
             <MenuItem value="yearly">Yearly</MenuItem>
             <MenuItem value="monthly">Monthly</MenuItem>
-            <MenuItem value="weekly">Weekly</MenuItem>
+            <MenuItem value="pay-as-you-go">Pay As You Go</MenuItem>
           </Select>
         </FormControl>
       </Stack>
