@@ -9,6 +9,7 @@ import {
 import MetricCard from "@/components/Cards/MetricCard";
 import VisitorsChart from "@/components/Charts/VisitorsChart";
 import OffersSentChart from "@/components/Charts/OffersSentChart";
+import OfferList from "@/components/OfferList/OfferList";
 
 const Dashboard: React.FC = () => {
   return (
@@ -48,7 +49,7 @@ const Dashboard: React.FC = () => {
           alignItems="center"
           flexDirection="row"
           gap={3}
-          mt={5}
+          my={5}
         >
           <Stack width="100%">
             <Typography
@@ -76,6 +77,9 @@ const Dashboard: React.FC = () => {
               <OffersSentChart />
             </Paper>
           </Stack>
+        </Box>
+        <Box>
+          <OfferList />
         </Box>
       </Container>
     </Box>
