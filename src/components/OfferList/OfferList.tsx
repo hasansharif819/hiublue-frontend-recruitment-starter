@@ -18,7 +18,6 @@ import {
   Select,
   FormControl,
   InputLabel,
-  Chip,
   Button,
   InputAdornment,
 } from "@mui/material";
@@ -243,10 +242,10 @@ const OffersList: React.FC = () => {
                   )}
                 </TableCell>
                 <TableCell>${offer.price}</TableCell>
-                <TableCell>
+                <TableCell sx={{ cursor: "pointer" }}>
                   <EditSharpIcon />
                 </TableCell>
-                <TableCell>
+                <TableCell sx={{ cursor: "pointer" }}>
                   <MoreVertSharpIcon />
                 </TableCell>
               </TableRow>

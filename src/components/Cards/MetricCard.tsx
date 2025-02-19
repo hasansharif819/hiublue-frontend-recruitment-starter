@@ -4,17 +4,22 @@ import upicon from "@/assets/icons/ic-solar_double-alt-arrow-up-bold-duotone.png
 
 interface MetricCardProps {
   title: string;
-  value: string;
+  currentValue: string;
+  previousValue: string;
   change: number;
 }
 
-const MetricCard: React.FC<MetricCardProps> = ({ title, value, change }) => {
+const MetricCard: React.FC<MetricCardProps> = ({
+  title,
+  currentValue,
+  previousValue,
+}) => {
   return (
     <Card sx={{ width: "100%", p: 2, textAlign: "left" }}>
       <CardContent>
         <Typography variant="h6">{title}</Typography>
         <Typography variant="h4" fontWeight="bold">
-          {value}
+          {currentValue}
         </Typography>
         <Stack
           direction="row"
@@ -22,12 +27,23 @@ const MetricCard: React.FC<MetricCardProps> = ({ title, value, change }) => {
           justifyContent="left"
           gap={1}
         >
-          <Typography variant="body2" color={change >= 0 ? "green" : "red"}>
-            {change >= 0 ? (
-              <img src={upicon.src} alt="up" />
+          <Typography
+            variant="body2"
+            color={
+              Number(currentValue) >= Number(previousValue) &&
+              Number(currentValue) !== 0
+                ? "green"
+                : "red"
+            }
+          >
+            {Number(currentValue) >= Number(previousValue) ? (
+              <img src={downicon.src} alt="up" />
             ) : (
-              <img src={downicon.src} alt="down" />
+              <img src={upicon.src} alt="down" />
             )}
+          </Typography>
+          <Typography variant="body2" color="#637381">
+            {previousValue}
           </Typography>
           <Typography variant="body2" color="#637381">
             previous month

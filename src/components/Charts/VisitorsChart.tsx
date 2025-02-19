@@ -21,8 +21,6 @@ const VisitorsChart: React.FC = () => {
         );
         const data = await response.json();
 
-        console.log("data ===>", data);
-
         // Transform the API data into the required format
         const transformedSeries = [
           {
