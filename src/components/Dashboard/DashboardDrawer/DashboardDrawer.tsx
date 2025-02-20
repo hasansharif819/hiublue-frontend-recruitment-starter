@@ -8,7 +8,14 @@ import Drawer from "@mui/material/Drawer";
 import IconButton from "@mui/material/IconButton";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
-import { Avatar, Stack, Menu, MenuItem, ListItemIcon } from "@mui/material";
+import {
+  Avatar,
+  Stack,
+  Menu,
+  MenuItem,
+  ListItemIcon,
+  CircularProgress,
+} from "@mui/material";
 import avatar from "@/assets/images/stack.png";
 import SideBar from "../SideBar/SideBar";
 import { useAuth } from "@/context/AuthContext";
@@ -23,11 +30,18 @@ export default function DashboardDrawer({
 }: {
   children: React.ReactNode;
 }) {
-  const { user, logout } = useAuth();
+  const { user, logout, loading } = useAuth();
   const router = useRouter();
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [isClosing, setIsClosing] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+
+  // Redirect to login if user is not authenticated
+  React.useEffect(() => {
+    if (!loading && !user) {
+      router.push("/login");
+    }
+  }, [user, loading, router]);
 
   const handleDrawerClose = () => {
     setIsClosing(true);
@@ -57,6 +71,22 @@ export default function DashboardDrawer({
     router.push("/login");
     handleMenuClose();
   };
+
+  // Show loading spinner while initializing
+  if (loading) {
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+        }}
+      >
+        <CircularProgress />
+      </Box>
+    );
+  }
 
   return (
     <Box sx={{ display: "flex" }}>
