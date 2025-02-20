@@ -9,3 +9,17 @@ export interface DrawerItem {
   child?: DrawerItem[];
   image?: string;
 }
+
+export interface User {
+  id: number;
+  name: string;
+  email: string;
+}
+
+export interface FormData {
+  planType: string;
+  refundable: boolean;
+  onDemand: boolean;
+  negotiable: boolean;
+  price: number;
+}
