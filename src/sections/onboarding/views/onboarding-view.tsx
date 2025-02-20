@@ -49,7 +49,6 @@ const OnboardingView: React.FC = () => {
       try {
         setLoading(true);
         const token = localStorage.getItem("token");
-        console.log("token === ", token);
         const response = await fetch(`https://dummy-1.hiublue.com/api/users`, {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -63,8 +62,7 @@ const OnboardingView: React.FC = () => {
         }
 
         const data = await response.json();
-        setUsers(data?.data?.data || []);
-        console.log("user === ", users);
+        setUsers(data?.data || []);
       } catch (error) {
         console.error("Error fetching data:", error);
         setUsers([]);
@@ -74,7 +72,7 @@ const OnboardingView: React.FC = () => {
     };
 
     fetchData();
-  }, []);
+  }, [users]);
 
   const onSubmit = async (data: FormData) => {
     console.log("Post data === ", data);
