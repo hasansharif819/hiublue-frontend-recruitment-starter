@@ -19,6 +19,7 @@ import {
 import { styled } from "@mui/material/styles";
 import { useForm, SubmitHandler, FieldValues } from "react-hook-form";
 import { toast } from "sonner";
+import { useAuth } from "@/context/AuthContext";
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: "flex",
@@ -48,6 +49,7 @@ export default function SignIn() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const { login } = useAuth();
 
   const {
     register,
@@ -71,16 +73,27 @@ export default function SignIn() {
         body: JSON.stringify(data),
       });
 
-      if (!response.ok) throw new Error("Login failed");
-
       const result = await response.json();
-      localStorage.setItem("token", result.token);
-      localStorage.setItem("user", JSON.stringify(result.user));
+
+      // Handle API errors
+      if (!response.ok) {
+        if (response.status === 401) {
+          setError("Unauthorized!!! Invalid email or password");
+          toast.error("Invalid email or password. Please try again.");
+        } else {
+          setError("Something went wrong. Please try again.");
+          toast.error("Login failed. Please try again.");
+        }
+        return;
+      }
+
+      // If login is successful
+      login(result.user, result.token);
       toast.success("Successfully logged in!");
       router.push("/dashboard");
     } catch (err) {
-      setError("Invalid email or password");
-      toast.error("Login failed. Please try again.");
+      setError("Something went wrong. Please try again.");
+      toast.error("Unauthorized");
     } finally {
       setLoading(false);
     }
@@ -147,6 +160,11 @@ export default function SignIn() {
               />
             </FormControl>
             <FormControlLabel control={<Checkbox />} label="Remember me" />
+            {error && ( // Display error message if there's an error
+              <Typography color="error" variant="body2" align="center">
+                {error}
+              </Typography>
+            )}
             <Button
               type="submit"
               fullWidth

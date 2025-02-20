@@ -8,9 +8,13 @@ import Drawer from "@mui/material/Drawer";
 import IconButton from "@mui/material/IconButton";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
-import { Avatar, Stack } from "@mui/material";
+import { Avatar, Stack, Menu, MenuItem, ListItemIcon } from "@mui/material";
 import avatar from "@/assets/images/stack.png";
 import SideBar from "../SideBar/SideBar";
+import { useAuth } from "@/context/AuthContext";
+import Logout from "@mui/icons-material/Logout";
+import Person from "@mui/icons-material/Person";
+import { useRouter } from "next/navigation";
 
 const drawerWidth = 240;
 
@@ -19,8 +23,11 @@ export default function DashboardDrawer({
 }: {
   children: React.ReactNode;
 }) {
+  const { user, logout } = useAuth();
+  const router = useRouter();
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [isClosing, setIsClosing] = React.useState(false);
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
   const handleDrawerClose = () => {
     setIsClosing(true);
@@ -35,6 +42,20 @@ export default function DashboardDrawer({
     if (!isClosing) {
       setMobileOpen(!mobileOpen);
     }
+  };
+
+  const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleLogout = () => {
+    logout();
+    router.push("/login");
+    handleMenuClose();
   };
 
   return (
@@ -96,7 +117,56 @@ export default function DashboardDrawer({
               ></Typography>
             </Box>
             <Stack direction="row" gap={3}>
-              <Avatar alt="User" src={avatar.src} />
+              <IconButton onClick={handleMenuOpen} sx={{ p: 0 }}>
+                <Avatar alt="User" src={avatar.src} />
+              </IconButton>
+              <Menu
+                anchorEl={anchorEl}
+                open={Boolean(anchorEl)}
+                onClose={handleMenuClose}
+                onClick={handleMenuClose}
+                PaperProps={{
+                  elevation: 0,
+                  sx: {
+                    overflow: "visible",
+                    filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
+                    mt: 1.5,
+                    "& .MuiAvatar-root": {
+                      width: 32,
+                      height: 32,
+                      ml: -0.5,
+                      mr: 1,
+                    },
+                    "&:before": {
+                      content: '""',
+                      display: "block",
+                      position: "absolute",
+                      top: 0,
+                      right: 14,
+                      width: 10,
+                      height: 10,
+                      bgcolor: "background.paper",
+                      transform: "translateY(-50%) rotate(45deg)",
+                      zIndex: 0,
+                    },
+                  },
+                }}
+                transformOrigin={{ horizontal: "right", vertical: "top" }}
+                anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
+              >
+                <MenuItem>
+                  <ListItemIcon>
+                    <Person fontSize="small" />
+                  </ListItemIcon>
+                  Profile
+                </MenuItem>
+                <MenuItem onClick={handleLogout}>
+                  <ListItemIcon>
+                    <Logout fontSize="small" />
+                  </ListItemIcon>
+                  Logout
+                </MenuItem>
+              </Menu>
             </Stack>
           </Box>
         </Toolbar>

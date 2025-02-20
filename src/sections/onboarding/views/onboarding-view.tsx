@@ -37,8 +37,7 @@ const OnboardingView: React.FC = () => {
   });
 
   const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const [users, setUsers] = React.useState<User[]>([]);
-  const [loading, setLoading] = React.useState(false);
+  const [users, setUsers] = useState<User[]>([]);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [snackbarSeverity, setSnackbarSeverity] = useState<"success" | "error">(
     "success"
@@ -47,7 +46,6 @@ const OnboardingView: React.FC = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        setLoading(true);
         const token = localStorage.getItem("token");
         const response = await fetch(`https://dummy-1.hiublue.com/api/users`, {
           headers: {
@@ -66,8 +64,6 @@ const OnboardingView: React.FC = () => {
       } catch (error) {
         console.error("Error fetching data:", error);
         setUsers([]);
-      } finally {
-        setLoading(false);
       }
     };
 
@@ -111,35 +107,6 @@ const OnboardingView: React.FC = () => {
   const handleSnackbarClose = () => {
     setSnackbarOpen(false);
   };
-
-  if (loading) {
-    return (
-      <Box
-        sx={{
-          padding: 3,
-          maxWidth: 720,
-          height: "100%",
-          margin: "0 auto",
-          gap: 3,
-          boxShadow: 3,
-          borderRadius: 2,
-          backgroundColor: "background.paper",
-        }}
-      >
-        <Stack
-          direction="column"
-          borderBottom={1}
-          borderColor="#E0E0E0"
-          pb={3}
-          mb={3}
-        >
-          <Typography variant="h4" sx={{ fontWeight: "bold" }}>
-            Loading
-          </Typography>
-        </Stack>
-      </Box>
-    );
-  }
 
   return (
     <Box

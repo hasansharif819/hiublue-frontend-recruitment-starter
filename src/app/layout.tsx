@@ -4,6 +4,7 @@ import CssBaseline from "@mui/material/CssBaseline";
 import InitColorSchemeScript from "@mui/material/InitColorSchemeScript";
 import ThemeProvider from "@/theme/index";
 import { Toaster } from "sonner";
+import { AuthProvider } from "@/context/AuthContext";
 
 export default function RootLayout(props: { children: React.ReactNode }) {
   return (
@@ -12,12 +13,14 @@ export default function RootLayout(props: { children: React.ReactNode }) {
         <InitColorSchemeScript attribute="class" />
         <AppRouterCacheProvider options={{ enableCssLayer: true }}>
           <>
-            <Toaster position="top-center" />
-            <ThemeProvider>
-              {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
-              <CssBaseline />
-              {props.children}
-            </ThemeProvider>
+            <AuthProvider>
+              <Toaster position="top-center" />
+              <ThemeProvider>
+                {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
+                <CssBaseline />
+                {props.children}
+              </ThemeProvider>
+            </AuthProvider>
           </>
         </AppRouterCacheProvider>
       </body>
