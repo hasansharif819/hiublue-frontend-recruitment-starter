@@ -17,5 +17,10 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(absoluteURL.toString());
   }
 
+  const { pathname, origin } = request.nextUrl;
+  if (pathname === "/") {
+    return NextResponse.redirect(new URL("/dashboard", origin));
+  }
+
   return NextResponse.next();
 }

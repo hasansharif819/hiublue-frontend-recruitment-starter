@@ -2,7 +2,9 @@ import axios from "axios";
 import { getCookie } from "cookies-next";
 
 const api = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_BACKEND_API_URL,
+  baseURL:
+    process.env.NEXT_PUBLIC_BACKEND_API_URL ||
+    "https://dummy-1.hiublue.com/api",
   headers: {
     "Content-Type": "application/json",
   },
