@@ -22,6 +22,7 @@ import { useAuth } from "@/context/AuthContext";
 import Logout from "@mui/icons-material/Logout";
 import Person from "@mui/icons-material/Person";
 import { useRouter } from "next/navigation";
+import { Dashboard } from "@mui/icons-material";
 
 const drawerWidth = 240;
 
@@ -184,11 +185,17 @@ export default function DashboardDrawer({
                 transformOrigin={{ horizontal: "right", vertical: "top" }}
                 anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
               >
-                <MenuItem>
+                <MenuItem onClick={() => router.push("/dashboard")}>
+                  <ListItemIcon>
+                    <Dashboard fontSize="small" />
+                  </ListItemIcon>
+                  Dashboard
+                </MenuItem>
+                <MenuItem onClick={() => router.push("/onboarding")}>
                   <ListItemIcon>
                     <Person fontSize="small" />
                   </ListItemIcon>
-                  Profile
+                  Onboarding
                 </MenuItem>
                 <MenuItem onClick={handleLogout}>
                   <ListItemIcon>

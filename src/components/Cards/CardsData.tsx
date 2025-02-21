@@ -73,8 +73,8 @@ const CardsData: React.FC = () => {
     <Box width="100%" maxWidth="100%">
       <Box
         display="flex"
-        flexDirection={{ xs: "column", lg: "row" }}
-        alignItems={{ xs: "stretch", lg: "center" }}
+        flexDirection="row"
+        alignItems="center"
         justifyContent="space-between"
         sx={{ my: 3 }}
       >
