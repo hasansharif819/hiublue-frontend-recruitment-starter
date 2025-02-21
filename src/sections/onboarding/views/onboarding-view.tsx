@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   Box,
   Typography,
@@ -20,6 +20,9 @@ import {
 import { useForm, Controller } from "react-hook-form";
 import DatePickerComponent from "@/components/InputFields/DatePicker";
 import { FormData, User } from "@/types/common";
+import useSWR from "swr";
+import { fetcher } from "@/utils";
+import { toast } from "sonner";
 
 const OnboardingView: React.FC = () => {
   const {
@@ -37,41 +40,16 @@ const OnboardingView: React.FC = () => {
   });
 
   const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const [users, setUsers] = useState<User[]>([]);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [snackbarSeverity, setSnackbarSeverity] = useState<"success" | "error">(
     "success"
   );
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const token = localStorage.getItem("token");
-        const response = await fetch(`https://dummy-1.hiublue.com/api/users`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+  const { data } = useSWR(`/users`, fetcher);
 
-        if (!response.ok) {
-          const errorData = await response.json();
-          console.error("API Error:", errorData);
-          throw new Error("Failed to fetch data");
-        }
-
-        const data = await response.json();
-        setUsers(data?.data || []);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-        setUsers([]);
-      }
-    };
-
-    fetchData();
-  }, [users]);
+  const users = data?.data || [];
 
   const onSubmit = async (data: FormData) => {
-    console.log("Post data === ", data);
     try {
       const token = localStorage.getItem("token");
       const response = await fetch("https://dummy-1.hiublue.com/api/offers", {
@@ -84,11 +62,8 @@ const OnboardingView: React.FC = () => {
       });
 
       if (!response.ok) {
-        throw new Error("Failed to submit offer");
+        toast.error("Failed to submit offer");
       }
-
-      const result = await response.json();
-      console.log("API Response:", result);
 
       // Show success message
       setSnackbarMessage("Offer submitted successfully!");
