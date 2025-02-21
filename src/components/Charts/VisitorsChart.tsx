@@ -1,66 +1,57 @@
 "use client";
 
+import { fetcher } from "@/utils";
+import { Box } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import Chart from "react-apexcharts";
+import useSWR from "swr";
 
 const VisitorsChart: React.FC = () => {
   const [series, setSeries] = useState<{ name: string; data: number[] }[]>([]);
+  const [typeFilter, setTypeFilter] = useState<string>("this-week");
 
+  const { data: response, isLoading } = useSWR(
+    `/dashboard/stat?filter=${typeFilter}`,
+    fetcher
+  );
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const token = localStorage.getItem("token");
+    if (response) {
+      const transformedSeries = [
+        {
+          name: "Desktop",
+          data: [
+            response?.website_visits?.monday?.desktop || 0,
+            response?.website_visits?.tuesday?.desktop || 0,
+            response?.website_visits?.wednesday?.desktop || 0,
+            response?.website_visits?.thursday?.desktop || 0,
+            response?.website_visits?.friday?.desktop || 0,
+            response?.website_visits?.saturday?.desktop || 0,
+            response?.website_visits?.sunday?.desktop || 0,
+          ],
+        },
+        {
+          name: "Mobile",
+          data: [
+            response?.website_visits?.monday?.mobile || 0,
+            response?.website_visits?.tuesday?.mobile || 0,
+            response?.website_visits?.wednesday?.mobile || 0,
+            response?.website_visits?.thursday?.mobile || 0,
+            response?.website_visits?.friday?.mobile || 0,
+            response?.website_visits?.saturday?.mobile || 0,
+            response?.website_visits?.sunday?.mobile || 0,
+          ],
+        },
+      ];
 
-        const response = await fetch(
-          "https://dummy-1.hiublue.com/api/dashboard/stat?filter=this-week",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        const data = await response.json();
+      setSeries(transformedSeries);
+    }
+  }, [response]);
 
-        // Transform the API data into the required format
-        const transformedSeries = [
-          {
-            name: "Desktop",
-            data: [
-              data.website_visits.monday.desktop,
-              data.website_visits.tuesday.desktop,
-              data.website_visits.wednesday.desktop,
-              data.website_visits.thursday.desktop,
-              data.website_visits.friday.desktop,
-              data.website_visits.saturday.desktop,
-              data.website_visits.sunday.desktop,
-            ],
-          },
-          {
-            name: "Mobile",
-            data: [
-              data.website_visits.monday.mobile,
-              data.website_visits.tuesday.mobile,
-              data.website_visits.wednesday.mobile,
-              data.website_visits.thursday.mobile,
-              data.website_visits.friday.mobile,
-              data.website_visits.saturday.mobile,
-              data.website_visits.sunday.mobile,
-            ],
-          },
-        ];
-
-        setSeries(transformedSeries);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
-    fetchData();
-  }, []);
+  if (isLoading) return <Box>Loading...</Box>;
 
   const options = {
     chart: { type: "bar" as const },
-    xaxis: { categories: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"] },
+    xaxis: { categories: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"] },
     colors: ["#007867", "#FFAB00"],
     legend: { position: "top" as const },
     plotOptions: {
@@ -93,9 +84,30 @@ const VisitorsChart: React.FC = () => {
         },
       },
     },
+    responsive: [
+      {
+        breakpoint: 480,
+        options: {
+          chart: {
+            stacked: true,
+          },
+          plotOptions: {
+            bar: {
+              horizontal: true,
+            },
+          },
+        },
+      },
+    ],
   };
 
-  return <Chart options={options} series={series} type="bar" height={318} />;
+  return (
+    <Box gap={3} width="100%">
+      <Box flex={1}>
+        <Chart options={options} series={series} type="bar" height={318} />
+      </Box>
+    </Box>
+  );
 };
 
 export default VisitorsChart;

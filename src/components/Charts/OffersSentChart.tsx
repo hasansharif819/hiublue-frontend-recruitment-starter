@@ -1,50 +1,38 @@
 "use client";
 
+import { fetcher } from "@/utils";
+import { Box } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import Chart from "react-apexcharts";
+import useSWR from "swr";
 
 const OffersSentChart: React.FC = () => {
   const [series, setSeries] = useState<{ name: string; data: number[] }[]>([]);
+  const [typeFilter, setTypeFilter] = useState<string>("this-week");
+
+  const { data: response, isLoading } = useSWR(
+    `/dashboard/stat?filter=${typeFilter}`,
+    fetcher
+  );
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const token = localStorage.getItem("token");
-
-        const response = await fetch(
-          "https://dummy-1.hiublue.com/api/dashboard/stat?filter=this-week",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        const data = await response.json();
-
-        // Transform the API data into the required format
-        const transformedSeries = [
-          {
-            name: "Offers Sent",
-            data: [
-              data.offers_sent.monday,
-              data.offers_sent.tuesday,
-              data.offers_sent.wednesday,
-              data.offers_sent.thursday,
-              data.offers_sent.friday,
-              data.offers_sent.saturday,
-              data.offers_sent.sunday,
-            ],
-          },
-        ];
-
-        setSeries(transformedSeries);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
-    fetchData();
-  }, []);
+    if (response?.offers_sent) {
+      setSeries([
+        {
+          name: "Offers Sent",
+          data: [
+            response.offers_sent.sunday ?? 0,
+            response.offers_sent.monday ?? 0,
+            response.offers_sent.tuesday ?? 0,
+            response.offers_sent.wednesday ?? 0,
+            response.offers_sent.thursday ?? 0,
+            response.offers_sent.friday ?? 0,
+            response.offers_sent.saturday ?? 0,
+          ],
+        },
+      ]);
+    }
+  }, [response]);
 
   const options = {
     chart: { type: "line" as const },
@@ -53,7 +41,13 @@ const OffersSentChart: React.FC = () => {
     colors: ["#000"],
   };
 
-  return <Chart options={options} series={series} type="line" height={318} />;
+  if (isLoading) return <Box>Loading...</Box>;
+
+  return (
+    <Box width="100%">
+      <Chart options={options} series={series} type="line" height={318} />
+    </Box>
+  );
 };
 
 export default OffersSentChart;

@@ -89,7 +89,7 @@ export default function DashboardDrawer({
   }
 
   return (
-    <Box sx={{ display: "flex" }}>
+    <Box sx={{ display: "flex", width: "100%", maxWidth: "100%" }}>
       <CssBaseline />
       <AppBar
         position="fixed"
@@ -146,7 +146,7 @@ export default function DashboardDrawer({
                 }}
               ></Typography>
             </Box>
-            <Stack direction="row" gap={3}>
+            <Box display="flex" gap={3}>
               <IconButton onClick={handleMenuOpen} sx={{ p: 0 }}>
                 <Avatar alt="User" src={avatar.src} />
               </IconButton>
@@ -197,7 +197,7 @@ export default function DashboardDrawer({
                   Logout
                 </MenuItem>
               </Menu>
-            </Stack>
+            </Box>
           </Box>
         </Toolbar>
       </AppBar>
