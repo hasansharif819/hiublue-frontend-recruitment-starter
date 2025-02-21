@@ -37,33 +37,33 @@ Getting Started
 Prerequisites
 Node.js (v16 or higher)
 
-npm or yarn
+## npm or yarn
 
 Git
 
-Installation
-Clone the repository
+## Installation
+* Clone the repository
 
-bash
-Copy
-git clone https://github.com/hasansharif819/hiublue-frontend-recruitment-starter.git
-cd project-name
-Install dependencies
+## bash
+- Copy
+- git clone https://github.com/hasansharif819/hiublue-frontend-recruitment-starter.git
+- cd project-name
+- Install dependencies
 
-bash
-Copy
-npm install
+## bash
+- Copy
+- npm install
 # or
-yarn install
-Set up environment variables
+- yarn install
+- Set up environment variables
 
 Create a .env.local file in the root directory and add the necessary environment variables:
 
-env
-Copy
-NEXT_PUBLIC_API_URL=your_api_url_here
-NEXT_PUBLIC_AUTH_TOKEN=your_auth_token_here
-Run the development server
+## env
+- Copy
+- NEXT_PUBLIC_API_URL=your_api_url_here
+- NEXT_PUBLIC_AUTH_TOKEN=your_auth_token_here
+- Run the development server
 
 bash
 Copy
