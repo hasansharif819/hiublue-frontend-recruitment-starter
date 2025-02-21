@@ -1,103 +1,109 @@
-## **Overview**
+# Hiublue Dashboard
+## https://hiublue-dashboard.vercel.app
 
-First of all, congratulations on being shortlisted for the Frontend Developer position at hiublue! 🎉 As part of the selection process, we have designed a challenge to assess your skills in **Next.js, TypeScript, MUI, API handling, code structure and frontend architecture**.
+This project is a web application built using Next.js 14 (App Router), TypeScript, Material UI (MUI), React Hook Form, ApexCharts, and Context API for state management. The application includes features like authentication, an admin dashboard with real-time data, and a page for sending onboarding offers to new users. The project is deployed on Vercel.
 
-You will be provided with a **starter repository** that includes the basic project setup. Your task is to build a functional admin portal with authentication, data visualization on dashboard, basic onboarding offer functionality while integrating API.
+Features
+Authentication: Secure login page with authentication state managed using Context API and LocalStorage. Unauthorized users are restricted from accessing protected routes.
 
-We are providing:
+Admin Dashboard: Real-time data fetching, displayed in a table with pagination, searching, and filtering. Data is visualized using ApexCharts.
+
+Onboarding Offers: A dedicated page for admins to send onboarding offers to new users. Includes user search using MUI Autocomplete and form validation with yup or zod.
+
+Responsive Design: The application is fully responsive, ensuring a seamless experience across different devices.
+
+Clean Code Structure: Modular, reusable, and well-structured code with proper TypeScript typings.
+
+Version Control: Follows a clean Git workflow with feature branches and meaningful commit messages.
+
+Tech Stack
+Framework: Next.js 14 (App Router)
+
+Language: TypeScript
+
+UI Library: Material UI (MUI)
+
+Form Handling: React Hook Form (with yup or zod validation)
+
+Charting: ApexCharts
+
+State Management: Context API and LocalStorage
+
+Version Control: GitHub
+
+Deployment: Vercel
+
+Getting Started
+Prerequisites
+Node.js (v16 or higher)
+
+npm or yarn
+
+Git
+
+Installation
+Clone the repository
+
+bash
+Copy
+git clone https://github.com/your-username/project-name.git
+cd project-name
+Install dependencies
+
+bash
+Copy
+npm install
+# or
+yarn install
+Set up environment variables
+
+Create a .env.local file in the root directory and add the necessary environment variables:
+
+env
+Copy
+NEXT_PUBLIC_API_URL=your_api_url_here
+NEXT_PUBLIC_AUTH_TOKEN=your_auth_token_here
+Run the development server
+
+bash
+Copy
+npm run dev
+# or
+yarn dev
+The application will be running on http://localhost:3000.
+
+Deployment
+Deploy to Vercel
+
+Push your code to a GitHub repository.
+
+Go to Vercel and import your project.
+
+Follow the prompts to deploy your application.
+
+Access the deployed application
+
+Once deployed, Vercel will provide you with a live URL to access your application.
+
+Usage
+Authentication
+Login Page: Access the login page at /login. Enter your credentials to authenticate.
+
+Protected Routes: Only authenticated users can access the dashboard and other protected routes.
+
+Admin Dashboard
+Real-time Data: The dashboard fetches real-time data from the provided API and displays it in a table.
+
+Pagination, Searching, and Filtering: The table supports pagination, searching, and filtering for better data management.
+
+Charts: Data is visualized using ApexCharts for better insights.
+
+Sending Onboarding Offers
+Onboarding Page: Access the onboarding page at /onboarding.
+
+User Search: Use the MUI Autocomplete component to search for users.
+
+Form Validation: The form is validated using yup or zod before submission.
 
 - [**Figma design link**](https://www.figma.com/design/p4aO5zxiLUkws5DDTTWP92/Untitled?node-id=0-1&t=oePPLG5LIUguMtQy-1)
 - [**Postman collection**](https://documenter.getpostman.com/view/8605001/2sAYXFiHWQ)
-
-## **Tech Stack**
-
-- **Framework:** Next.js 14 (App Router)
-- **Language:** TypeScript
-- **UI Library:** Material UI (MUI)
-- **Form Handling:** React Hook Form (Use validation like yup or zod)
-- **Charting:** ApexCharts
-- **State Management:** Context API and LocalStorage
-- **Version Control:** GitHub (Fork the repo and maintain clean commits)
-- **Deployment:** Vercel
-
-## **Requirements**
-
-### **1. Authentication**
-
-- A login page will be already there, you have to implement the api first.
-- Store authentication state using **Context API and LocalStorage**.
-- Make sure no unauthorized user has access to the dashboard or any other routes.
-- Show different layouts for **authenticated vs. non-authenticated users**.
-
-### **2. Admin Dashboard**
-
-- Fetch **real-time data** from the provided API.
-- Display the data in an table with:
-  - Pagination
-  - Searching
-  - Filtering
-- Show **charts** based on API data using **ApexCharts**.
-
-### **3. Sending Onboarding Offer**
-
-- Implement a **separate page** where the admin can send onboarding offers to new users.
-- Allow the admin to **select a user** from a list and fill in additional fields. Do use Mui Autocomplete component. Instead of pulling all users, perform searching using api.
-- Using **React Hook Form** is preferred but not mandatory.
-- Validate the data before submitting using packages like yup and zod.
-
-### **4. Git & Code Structure**
-
-- Follow a **clean Git workflow** (feature branches, meaningful commit messages).
-- Write **modular, reusable, and well-structured** code.
-- Ensure **proper TypeScript typings** throughout the project.
-
-### **5. Responsive design**
-
-- The application should be responsive, adapting seamlessly to different screen sizes without compromising or design integrity.
-
-### **6. Readme File**
-
-- Include a **README** file that provides clear instructions on how to set up, run and test the application
-
-### **7. Deployment**
-
-- **Deploy the project to Vercel** and provide the link.
-
-## **How to Start**
-
-1. **Fork the starter repository** (link will be provided).
-2. Clone your fork and install dependencies:
-
-```bash
-git clone YOUR_FORKED_REPO
-cd YOUR_PROJECT
-npm install
-```
-
-1. Once completed, **push your changes.**
-
-## **Submission Requirements**
-
-- **GitHub Repository Link** (structured with a README file).
-- **Live Deployment Link**
-
-## **Evaluation Criteria**
-
-| **Category** | **Evaluation Criteria** |
-| --- | --- |
-| **Code Quality** | Readability, structure, component-based approach |
-| **TypeScript Usage** | Proper typing of components, hooks, data types, API responses |
-| **API Handling** | Proper usage of necessary caching, error handling |
-| **UI & UX** | Clean UI, responsiveness, MUI usage, adherence to Figma design. Using MUI is a must. |
-| **Authentication** | Token-based authentication, proper auth state management using Context API & LocalStorage |
-| **Table Features** | Proper implementation of pagination, searching using. |
-| **Form Handling** | Correct usage of React Hook Form and proper validation |
-| **Onboarding Offer** | Ability to select users, send onboarding requests |
-| **Error & Success Messages** | Proper display of validation errors and success messages |
-| **Git Practices** | Clean commits, meaningful messages, proper branching |
-
-## **Deadline**
-
-You have **4 days** to complete this challenge.
-
-Good luck!
