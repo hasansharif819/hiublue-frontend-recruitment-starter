@@ -46,7 +46,7 @@ Clone the repository
 
 bash
 Copy
-git clone https://github.com/your-username/project-name.git
+git clone https://github.com/hasansharif819/hiublue-frontend-recruitment-starter.git
 cd project-name
 Install dependencies
 
