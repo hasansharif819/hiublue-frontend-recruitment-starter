@@ -1,10 +1,9 @@
 import LoginView from "@/sections/login/views/login-view";
 
 export const metadata = {
-    title: 'Login',
+  title: "Hiublue/Login",
 };
 
-
 export default function Page() {
-    return <LoginView />;
+  return <LoginView />;
 }

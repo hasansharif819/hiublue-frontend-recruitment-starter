@@ -3,19 +3,8 @@
 import { Box, MenuItem, Select, Stack, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import MetricCard from "./MetricCard";
-
-interface ApiResponse {
-  current: {
-    active_users: number;
-    clicks: number;
-    appearance: number;
-  };
-  previous: {
-    active_users: number;
-    clicks: number;
-    appearance: number;
-  };
-}
+import useSWR from "swr";
+import { fetcher } from "@/utils";
 
 const CardsData: React.FC = () => {
   const [currentActiveUsers, setCurrentActiveUsers] = useState<number>(0);
@@ -28,55 +17,57 @@ const CardsData: React.FC = () => {
   const [clicksChange, setClicksChange] = useState<number>(0);
   const [appearancesChange, setAppearancesChange] = useState<number>(0);
   const [typeFilter, setTypeFilter] = useState<string>("this-week");
+
+  const {
+    data: response,
+    error,
+    isLoading,
+  } = useSWR(`/dashboard/summary?filter=${typeFilter}`, fetcher);
+
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const token = localStorage.getItem("token");
-        const response = await fetch(
-          `https://dummy-1.hiublue.com/api/dashboard/summary?filter=${typeFilter}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+    if (response) {
+      // Set current values
+      setCurrentActiveUsers(response?.current?.active_users || 0);
+      setCurrentClicks(response?.current?.clicks || 0);
+      setCurrentAppearances(response?.current?.appearance || 0);
+      setPreviousActiveUsers(response?.previous?.active_users || 0);
+      setPreviousClicks(response?.previous?.clicks || 0);
+      setPreviousAppearances(response?.previous?.appearance || 0);
 
-        if (!response.ok) {
-          throw new Error("Failed to fetch data");
-        }
+      // Calculate percentage changes
+      const calculateChange = (current: number, previous: number) => {
+        if (previous === 0) return 0;
+        return ((current - previous) / previous) * 100;
+      };
 
-        const data: ApiResponse = await response.json();
+      setActiveUsersChange(
+        calculateChange(
+          response?.current?.active_users || 0,
+          response?.previous?.active_users || 0
+        )
+      );
+      setClicksChange(
+        calculateChange(
+          response?.current?.clicks || 0,
+          response?.previous?.clicks || 0
+        )
+      );
+      setAppearancesChange(
+        calculateChange(
+          response?.current?.appearance || 0,
+          response?.previous?.appearance || 0
+        )
+      );
+    }
+  }, [response]);
 
-        // Set current values
-        setCurrentActiveUsers(data.current.active_users);
-        setCurrentClicks(data.current.clicks);
-        setCurrentAppearances(data.current.appearance);
-        setPreviousActiveUsers(data.previous.active_users);
-        setPreviousClicks(data.previous.clicks);
-        setPreviousAppearances(data.previous.appearance);
+  if (error) {
+    throw new Error("Failed to fetch data");
+  }
 
-        // Calculate percentage changes
-        const calculateChange = (current: number, previous: number) => {
-          if (previous === 0) return 0;
-          return ((current - previous) / previous) * 100;
-        };
-
-        setActiveUsersChange(
-          calculateChange(data.current.active_users, data.previous.active_users)
-        );
-        setClicksChange(
-          calculateChange(data.current.clicks, data.previous.clicks)
-        );
-        setAppearancesChange(
-          calculateChange(data.current.appearance, data.previous.appearance)
-        );
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
-    fetchData();
-  }, [typeFilter]);
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <Box width="100%">

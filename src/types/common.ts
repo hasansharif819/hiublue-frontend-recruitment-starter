@@ -31,3 +31,16 @@ export interface AuthContextType {
   logout: () => void;
   loading: boolean;
 }
+
+export interface ApiResponse {
+  current: {
+    active_users: number;
+    clicks: number;
+    appearance: number;
+  };
+  previous: {
+    active_users: number;
+    clicks: number;
+    appearance: number;
+  };
+}

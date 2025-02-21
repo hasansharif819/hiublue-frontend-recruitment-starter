@@ -1,10 +1,9 @@
 import OnboardingView from "@/sections/onboarding/views/onboarding-view";
 
 export const metadata = {
-    title: 'Onboarding',
+  title: "Hiublue/Onboarding",
 };
 
-
 export default function Page() {
-    return <OnboardingView/>;
+  return <OnboardingView />;
 }

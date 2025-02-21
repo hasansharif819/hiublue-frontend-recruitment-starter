@@ -5,10 +5,18 @@ import InitColorSchemeScript from "@mui/material/InitColorSchemeScript";
 import ThemeProvider from "@/theme/index";
 import { Toaster } from "sonner";
 import { AuthProvider } from "@/context/AuthContext";
+import Head from "next/head";
+
+export const metadata = {
+  title: "Hiublue",
+};
 
 export default function RootLayout(props: { children: React.ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <Head>
+        <link rel="icon" type="image/png" href="/favicon.png" />
+      </Head>
       <body>
         <InitColorSchemeScript attribute="class" />
         <AppRouterCacheProvider options={{ enableCssLayer: true }}>
