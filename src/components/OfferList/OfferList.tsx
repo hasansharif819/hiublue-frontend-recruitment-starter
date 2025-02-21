@@ -26,6 +26,8 @@ import {
 import EditSharpIcon from "@mui/icons-material/EditSharp";
 import MoreVertSharpIcon from "@mui/icons-material/MoreVertSharp";
 import SearchSharpIcon from "@mui/icons-material/SearchSharp";
+import useSWR from "swr";
+import { fetcher } from "@/utils";
 
 interface Offer {
   id: number;
@@ -68,37 +70,21 @@ const OffersList: React.FC = () => {
   const [pageSize, setPageSize] = useState<number>(5);
   const [totalItems, setTotalItems] = useState<number>(0);
   const [tabIndex, setTabIndex] = useState<string>("all");
+  const statusFilter = tabIndex === "accepted" ? "&status=accepted" : "";
+
+  const { data } = useSWR(
+    `/offers?page=${currentPage}&per_page=${pageSize}${statusFilter}`,
+    fetcher
+  );
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const token = localStorage.getItem("token");
-        const statusFilter = tabIndex === "accepted" ? "&status=accepted" : "";
-        const response = await fetch(
-          `https://dummy-1.hiublue.com/api/offers?page=${currentPage}&per_page=${pageSize}${statusFilter}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-
-        if (!response.ok) {
-          throw new Error("Failed to fetch data");
-        }
-
-        const data: ApiResponse = await response.json();
-        setOffers(data.data);
-        setFilteredOffers(data.data);
-        setTotalPages(data.meta.last_page);
-        setTotalItems(data.meta.total);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
-    fetchData();
-  }, [currentPage, pageSize, tabIndex]);
+    if (data) {
+      setOffers(data.data);
+      setFilteredOffers(data.data);
+      setTotalPages(data.meta.last_page);
+      setTotalItems(data.meta.total);
+    }
+  }, [data]);
 
   useEffect(() => {
     const filtered = offers.filter((offer) => {
