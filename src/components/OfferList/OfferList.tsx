@@ -298,14 +298,14 @@ const OffersList: React.FC = () => {
       <Box
         sx={{
           display: "flex",
-          justifyContent: "space-between",
+          justifyContent: "right",
           alignItems: "center",
           marginTop: 3,
         }}
       >
         <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
           <Typography variant="body1">Rows per page:</Typography>
-          <FormControl variant="outlined" sx={{ minWidth: 80 }}>
+          <FormControl variant="standard" sx={{ minWidth: 80 }}>
             <Select
               value={pageSize}
               onChange={handlePageSizeChange}
@@ -325,6 +325,11 @@ const OffersList: React.FC = () => {
           page={currentPage}
           onChange={handlePageChange}
           color="primary"
+          siblingCount={0}
+          boundaryCount={0}
+          showFirstButton={false}
+          showLastButton={false}
+          size="small"
         />
       </Box>
     </Box>
